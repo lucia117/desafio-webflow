@@ -1,0 +1,495 @@
+.page {
+  --bg: #0a0b14;
+  --surface: rgba(255, 255, 255, 0.055);
+  --surface-strong: rgba(255, 255, 255, 0.09);
+  --border: rgba(167, 139, 250, 0.35);
+  --violet: #8b5cf6;
+  --cyan: #22d3ee;
+  --text: #e6e6f0;
+  --text-dim: #9aa4c0;
+  --radius: 18px;
+  --mono: ui-monospace, "SFMono-Regular", "JetBrains Mono", Menlo, Consolas,
+    monospace;
+
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.5rem;
+  padding: 4rem 1.5rem 5rem;
+  background: var(--bg);
+  overflow-x: hidden;
+  font-family: var(--font-body), system-ui, sans-serif;
+}
+
+@keyframes spectralIn {
+  0% {
+    opacity: 0;
+    filter: blur(16px) saturate(1.4);
+    transform: translateY(18px) scale(0.94);
+  }
+  55% {
+    opacity: 0.85;
+    filter: blur(4px) saturate(1.1);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0) saturate(1);
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes spectralOut {
+  0% {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0) scale(1);
+  }
+  40% {
+    opacity: 0.5;
+    filter: blur(6px);
+  }
+  100% {
+    opacity: 0;
+    filter: blur(18px) saturate(1.6);
+    transform: translateY(-16px) scale(0.94);
+  }
+}
+
+.halo {
+  position: absolute;
+  top: -10%;
+  left: 50%;
+  width: 60rem;
+  height: 40rem;
+  transform: translateX(-50%);
+  background: radial-gradient(
+    ellipse at center,
+    rgba(139, 92, 246, 0.28),
+    rgba(34, 211, 238, 0.08) 45%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+.header {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  max-width: 40rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.kicker {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--cyan);
+  opacity: 0.85;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-display), serif;
+  font-weight: 700;
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  background: linear-gradient(120deg, #f5f3ff 0%, var(--violet) 55%, var(--cyan) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.subtitle {
+  margin: 0;
+  color: var(--text-dim);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.form {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 40rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  padding: 1.75rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.02) inset,
+    0 20px 60px -30px rgba(139, 92, 246, 0.35);
+  animation: spectralIn 0.6s ease both;
+}
+
+.formExit {
+  animation: spectralOut 0.45s ease forwards;
+  pointer-events: none;
+}
+
+.textarea {
+  width: 100%;
+  resize: vertical;
+  min-height: 7rem;
+  padding: 0.9rem 1rem;
+  border-radius: calc(var(--radius) - 6px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(0, 0, 0, 0.35);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.textarea::placeholder {
+  color: rgba(230, 230, 240, 0.35);
+}
+
+.textarea:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 2px;
+}
+
+.presets {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.presetsLabel {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  margin-right: 0.25rem;
+}
+
+.presetButton {
+  padding: 0.4rem 0.8rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: var(--surface-strong);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.presetButton:hover:not(:disabled) {
+  border-color: var(--cyan);
+  color: var(--cyan);
+  transform: translateY(-1px);
+}
+
+.presetButton:focus-visible,
+.submitButton:focus-visible,
+.resetButton:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 2px;
+}
+
+.presetButton:disabled,
+.submitButton:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.submitButton {
+  padding: 0.85rem 1.2rem;
+  border-radius: calc(var(--radius) - 6px);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: linear-gradient(120deg, rgba(139, 92, 246, 0.85), rgba(34, 211, 238, 0.75));
+  color: #0a0b14;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: filter 0.2s ease, transform 0.2s ease;
+}
+
+.submitButton:hover:not(:disabled) {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+
+.error {
+  margin: 0;
+  color: #fda4af;
+  font-size: 0.85rem;
+}
+
+.spread {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  width: 100%;
+  max-width: 60rem;
+  animation: spectralIn 0.65s ease both;
+}
+
+.spreadExit {
+  animation: spectralOut 0.4s ease forwards;
+  pointer-events: none;
+}
+
+.resetButton {
+  position: relative;
+  z-index: 1;
+  margin-top: -1rem;
+  padding: 0.6rem 1.2rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-dim);
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+  animation: spectralIn 0.5s ease both;
+}
+
+.resetButton:hover {
+  color: var(--cyan);
+  border-color: var(--cyan);
+  transform: translateY(-1px);
+}
+
+.cardSlot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.cardPositionLabel {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--violet);
+}
+
+.spreadHint {
+  position: relative;
+  z-index: 1;
+  margin: -0.75rem 0 0;
+  font-size: 0.8rem;
+  font-style: italic;
+  color: var(--text-dim);
+  opacity: 0.75;
+  animation: spectralIn 0.6s ease both;
+}
+
+.card {
+  position: relative;
+  width: 220px;
+  height: 320px;
+  perspective: 1400px;
+  cursor: pointer;
+}
+
+.card:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 4px;
+  border-radius: var(--radius);
+}
+
+.card:hover .cardInner {
+  transform: translateY(-4px);
+}
+
+.card:hover .cardInner.cardFlipped {
+  transform: rotateY(180deg) translateY(-4px);
+}
+
+.cardInner {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.cardFlipped {
+  transform: rotateY(180deg);
+}
+
+.cardFace {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.cardBack {
+  background: radial-gradient(circle at 50% 42%, rgba(139, 92, 246, 0.28), transparent 62%),
+    linear-gradient(160deg, #14152b, #0a0b14 75%);
+}
+
+.backPattern {
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+      45deg,
+      rgba(139, 92, 246, 0.1) 0 1px,
+      transparent 1px 18px
+    ),
+    repeating-linear-gradient(
+      -45deg,
+      rgba(34, 211, 238, 0.08) 0 1px,
+      transparent 1px 18px
+    );
+}
+
+.backSeal {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  width: 150px;
+  height: 150px;
+  padding: 1rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(10, 11, 20, 0.4);
+  box-shadow: 0 0 34px -6px rgba(139, 92, 246, 0.55);
+}
+
+.backLogoNerdearla {
+  height: 64px;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.6));
+}
+
+.cardFront {
+  transform: rotateY(180deg);
+  background: linear-gradient(
+      135deg,
+      rgba(139, 92, 246, 0.16),
+      rgba(34, 211, 238, 0.08) 60%
+    ),
+    linear-gradient(160deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.015));
+  backdrop-filter: blur(10px);
+  padding: 1.4rem 1.2rem;
+  gap: 0.5rem;
+  text-align: center;
+}
+
+.cardFront::after {
+  content: "";
+  position: absolute;
+  inset: -40% -40% auto auto;
+  width: 60%;
+  height: 180%;
+  background: linear-gradient(
+    120deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.08) 50%,
+    transparent 60%
+  );
+  transform: rotate(20deg);
+  pointer-events: none;
+}
+
+.cardNumeral {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.95rem;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  letter-spacing: 0.08em;
+}
+
+.cardTag {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  padding: 0.18rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  color: var(--cyan);
+  background: rgba(34, 211, 238, 0.08);
+}
+
+.cardGlyphRing {
+  width: 82px;
+  height: 82px;
+  margin-top: 0.2rem;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.16), transparent 70%);
+}
+
+.cardGlyph {
+  width: 50px;
+  height: 50px;
+  fill: none;
+  stroke: var(--violet);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 6px rgba(139, 92, 246, 0.65));
+  transition: stroke 0.25s ease, filter 0.25s ease;
+}
+
+.card:hover .cardGlyph {
+  stroke: var(--cyan);
+  filter: drop-shadow(0 0 9px rgba(34, 211, 238, 0.75));
+}
+
+.cardName {
+  font-family: var(--font-display), serif;
+  font-size: 1.05rem;
+  color: var(--text);
+}
+
+.cardText {
+  margin: 0;
+  font-size: 0.85rem;
+  line-height: 1.45;
+  color: var(--text-dim);
+}
+
+@media (max-width: 720px) {
+  .spread {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cardInner,
+  .form,
+  .formExit,
+  .spread,
+  .spreadExit,
+  .resetButton {
+    animation: none;
+    transition: none;
+  }
+}
